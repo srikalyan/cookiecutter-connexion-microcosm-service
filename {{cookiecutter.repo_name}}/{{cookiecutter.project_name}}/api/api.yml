@@ -1,0 +1,253 @@
+---
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "Pet store"
+  description: "A sample API for performing CRUDS operations on pets."
+basePath: "/v1"
+schemes:
+  - "http"
+  - "https"
+paths:
+  /pets:
+    get:
+      operationId: "findPets"
+      description: "Returns all pets based on the search criteria"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "tags"
+          in: "query"
+          description: "tags to filter by"
+          required: false
+          type: "array"
+          items:
+            type: "string"
+          collectionFormat: "csv"
+        - name: "limit"
+          in: "query"
+          description: "maximum number of results to return"
+          required: false
+          type: "integer"
+          minimum: 1
+          maximum: 50
+          default: 10
+        - name: "offset"
+          in: "query"
+          description: "Offset from which results must be fetched"
+          required: false
+          type: "integer"
+          minimum: 0
+          default: 0
+        - name: "orderBy"
+          in: "query"
+          description: "Property of pet on which the result must be ordered"
+          required: false
+          type: "string"
+          default: "created"
+        - name: "direction"
+          in: "query"
+          description: "Direction on which the sorting must happen"
+          required: false
+          type: "string"
+          enum:
+            - "ASCENDING"
+            - "DESCENDING"
+          default: "ASCENDING"
+      responses:
+        "200":
+          description: "Sucessful response"
+          schema:
+            $ref: "#/definitions/PetList"
+        "500":
+          description: "Unexpected error occurred"
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      operationId: "addPet"
+      description: "Creates a new pet"
+      produces:
+        - "application/json"
+      consumes:
+        - "application/json"
+      parameters:
+        - name: "pet"
+          in: "body"
+          description: "Pet to add to the store"
+          required: true
+          schema:
+            $ref: "#/definitions/NewPet"
+      responses:
+        "201":
+          description: "pet response"
+          schema:
+            $ref: "#/definitions/Pet"
+        "400":
+          description: "Bad request, check the pet request"
+          schema:
+            $ref: "#/definitions/Error"
+        "409":
+          description: "A pet with the same name already exists"
+          schema:
+            $ref: "#/definitions/Error"
+        "500":
+          description: "Unexpected error occurred"
+          schema:
+            $ref: "#/definitions/Error"
+  /pets/{id}:
+    parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of pet"
+        required: true
+        type: "string"
+        format: "uuid"
+    get:
+      operationId: "findPetById"
+      description: "Returns pet by its ID"
+      produces:
+        - "application/json"
+      responses:
+        "200":
+          description: "Pet by its ID"
+          schema:
+            $ref: "#/definitions/Pet"
+        "400":
+          description: "Bad request, check the pet request"
+          schema:
+            $ref: "#/definitions/Error"
+        "404":
+          description: "A pet with the ID is not found"
+          schema:
+            $ref: "#/definitions/Error"
+        "500":
+          description: "Unexpected error occurred"
+          schema:
+            $ref: "#/definitions/Error"
+    delete:
+      operationId: "deletePet"
+      description: "deletes a pet by its ID"
+      responses:
+        "204":
+          description: "pet deleted"
+        "400":
+          description: "Bad request, check the pet request"
+          schema:
+            $ref: "#/definitions/Error"
+        "404":
+          description: "A pet with the ID is not found"
+          schema:
+            $ref: "#/definitions/Error"
+        "500":
+          description: "Unexpected error occurred"
+          schema:
+            $ref: "#/definitions/Error"
+definitions:
+  Pet:
+    type: "object"
+    description: "Class representing a pet"
+    allOf:
+      - $ref: "#/definitions/NewPet"
+      - type: "object"
+        properties:
+          id:
+            type: "string"
+            format: "uuid"
+            description: "ID associated with the pet"
+          created:
+            type: "integer"
+            format: "int64"
+            description: "Epoch at which the resource has been created"
+            readOnly: true
+          updated:
+            type: "integer"
+            format: "int64"
+            description: "Epoch at which the resource has been last updated"
+            readOnly: true
+        required:
+          - "id"
+  NewPet:
+    type: "object"
+    description: "Class representing a new pet"
+    properties:
+      name:
+        type: "string"
+        description: "Name of the pet"
+      tag:
+        type: "string"
+        description: "Label associated with the pet"
+    required:
+      - "name"
+  ListInfo:
+    type: "object"
+    description: "Meta data for a list"
+    properties:
+      totalCount:
+        type: "integer"
+        description: "Total number of pets found for the search criteria"
+        minimum: 0
+      limit:
+        type: "integer"
+        description: "Limit specified in the search criteria"
+        minimum: 1
+        maximum: 50
+        default: 25
+      offset:
+        type: "integer"
+        description: "Offset specified in the search criteria"
+        minimum: 0
+        default: 0
+      orderBy:
+        type: "string"
+        description: "Property name on which the list is ordered by"
+        default: "created"
+      direction:
+        type: "string"
+        enum:
+          - "ASCENDING"
+          - "DESCENDING"
+        default: "ASCENDING"
+    required:
+      - "totalCount"
+      - "limit"
+      - "offset"
+      - "orderBy"
+      - "direction"
+  PetList:
+    type: "object"
+    description: "Class represesnting a pet list"
+    properties:
+      items:
+        type: "array"
+        items:
+          $ref: "#/definitions/Pet"
+        description: "Lists pets found based on the search criteria"
+      info:
+        $ref: "#/definitions/ListInfo"
+    required:
+      - "items"
+      - "info"
+  Error:
+    type: "object"
+    description: "Class representing error message. Note: connexion error handlers respond in this format"
+    properties:
+      status:
+        type: "integer"
+        format: "int32"
+        description: "Status code of the error"
+      title:
+        type: "string"
+        description: "String representing the title of the error"
+      detail:
+        type: "string"
+        description: "Detail message about the error"
+      type:
+        type: "string"
+        description: >
+          An absolute URI that identifies the problem type.
+          When dereferenced, it SHOULD provide human-readable documentation for the problem type
+    required:
+      - "status"
+      - "title"
+      - "detail"
+      - "type"
