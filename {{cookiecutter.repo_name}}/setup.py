@@ -22,7 +22,7 @@ setup(
     ],
     install_requires=[
         "microcosm>=2,<3",
-        "microcosm-connexion<=1.0.0",
+        "microcosm-connexion>=1.0.0,<2.0.0",
         "microcosm-logging>=0.5.0",
         "microcosm-postgres>=1.17.0,<2.0.0",
         "ndg-httpsclient>=0.4.0,<1.0.0",
