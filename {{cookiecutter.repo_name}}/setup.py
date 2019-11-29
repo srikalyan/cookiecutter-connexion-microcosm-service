@@ -26,6 +26,7 @@ setup(
         "microcosm-logging>=0.5.0",
         "microcosm-postgres>=1.17.0,<2.0.0",
         "ndg-httpsclient>=0.4.0,<1.0.0",
+        "tornado<6,>=4.1",
         "uwsgi>=2.0.13.1,<3.0.0",
     ],
     tests_require=[

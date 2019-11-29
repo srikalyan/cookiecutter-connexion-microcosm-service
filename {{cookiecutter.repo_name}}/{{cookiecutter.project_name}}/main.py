@@ -32,7 +32,7 @@ def run_server():
 
     """
     graph = create_app(debug=True)
-    graph.connexion.run(port=graph.config.connexion.port)
+    graph.connexion.run(host=graph.config.connexion.host, port=graph.config.connexion.port)
 
 
 if __name__ == "__main__":
