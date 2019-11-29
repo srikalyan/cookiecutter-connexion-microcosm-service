@@ -1,5 +1,5 @@
-# Cookiecutter Python Build
-A simple cookie cutter for creating a python project with gitlab ci support.
+# Cookiecutter Connexion Microcosm Service
+A simple cookie cutter for creating a python services for various CI projects.
 
 Note: Heavily inspired by [python-build] and [microservice-service] 
 
@@ -13,7 +13,7 @@ Note: Heavily inspired by [python-build] and [microservice-service]
 
  3. Run cookiecutter against this repo
 
-        cookiecutter https://github.com/srikalyan/cookiecutter-python-build -f
+        cookiecutter https://github.com/srikalyan/cookiecutter-connexion-microcosm-service -f
         
  4. This project will create a small pet service with API, controller, persistence store.
         
