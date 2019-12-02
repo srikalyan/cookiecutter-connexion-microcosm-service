@@ -4,7 +4,7 @@
   "project_version": "1.0.0",
   "project_description": "A simple python service using connexions, microcosm projects",
   "author": "Srikalyan Swayampakula",
-  "author_email": "",
+  "author_email": "srikalyansswayam@gmail.com",
   "project_url": "http://www.srikalyan.com",
 
   "include_gitlab_ci": "Y",
