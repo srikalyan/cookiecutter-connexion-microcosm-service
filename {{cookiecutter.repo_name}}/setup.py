@@ -16,6 +16,7 @@ setup(
     author_email="{{ cookiecutter.author_email }}",
     url="{{ cookiecutter.project_url }}",
     packages=find_packages(exclude=["*.tests"]),
+    include_package_data=True,
     test_suite="{{ cookiecutter.project_name }}.tests",
     setup_requires=[
         "pytest-runner",
