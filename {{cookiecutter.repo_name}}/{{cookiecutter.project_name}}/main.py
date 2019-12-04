@@ -2,6 +2,8 @@
 CLI entry points.
 """
 
+import os
+
 from microcosm_postgres.createall import main as createall_main
 from microcosm_postgres.migrate import main as migrate_main
 
@@ -31,8 +33,9 @@ def run_server():
     Invoke Flask development server.
 
     """
+    os.environ["FLASK_ENV"] = "development"
     graph = create_app(debug=True)
-    graph.connexion.run(host=graph.config.connexion.host, port=graph.config.connexion.port)
+    graph.connexion.run()
 
 
 if __name__ == "__main__":

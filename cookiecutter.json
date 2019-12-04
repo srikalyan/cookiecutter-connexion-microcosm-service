@@ -6,6 +6,8 @@
   "author": "Srikalyan Swayampakula",
   "author_email": "srikalyansswayam@gmail.com",
   "project_url": "http://www.srikalyan.com",
+  "service_port": 5000,
+  "organization_name": "srikalyan",
 
   "include_gitlab_ci": "Y",
   "include_circle_ci": "Y",

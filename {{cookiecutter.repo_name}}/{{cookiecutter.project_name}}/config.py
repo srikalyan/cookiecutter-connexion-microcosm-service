@@ -14,7 +14,7 @@ def load_default_config(metadata):
     """
     config = Configuration(
         connexion=dict(
-            port=5000,
+            port={{ cookiecutter.service_port }},
             host="0.0.0.0",
             enable_swagger_ui=True,
         ),
