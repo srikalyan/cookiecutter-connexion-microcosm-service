@@ -1,0 +1,42 @@
+{% raw -%}
+name: Python image
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.7]
+
+    steps:
+    - name: Checkout the project
+      uses: actions/checkout@master
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        version: ${{ matrix.python-version }}
+    - name: Install build dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install tox qualifier
+    - name: Build the project
+      run: |
+        BRANCH_NAME=$(echo ${GITHUB_REF} | sed -e "s/refs\/heads\///g" | sed -e "s/\//-/g")
+        TAG_NAME=""
+        if [ $(echo "${GITHUB_REF}" | sed -e "s/refs\/pull\///g") != "${GITHUB_REF}" ]; then TAG_NAME=$(echo ${GITHUB_REF} | sed -e "s/refs\/tags\///g"); fi
+        update_qualifier --no-use-git --branch-name "$BRANCH_NAME" --tag-name "$TAG_NAME"
+        QUALIFIER_VERSION=$(python setup.py --version)
+        tox
+    - name: Publish to Registry
+      uses: srikalyan/Publish-Docker-Github-Action@master
+      with:
+{% endraw %}        name: {{cookiecutter.organization_name}}/{{ cookiecutter.repo_name }}/{{ cookiecutter.repo_name }}{% raw %}
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        registry: docker.pkg.github.com
+        tag_names: true
+{%- endraw %}
