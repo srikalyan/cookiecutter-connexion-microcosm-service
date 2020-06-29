@@ -56,7 +56,7 @@ paths:
           default: "ASCENDING"
       responses:
         "200":
-          description: "Sucessful response"
+          description: "Successful response"
           schema:
             $ref: "#/definitions/PetList"
         "500":
@@ -245,7 +245,7 @@ definitions:
         type: "string"
         description: >
           An absolute URI that identifies the problem type.
-          When dereferenced, it SHOULD provide human-readable documentation for the problem type
+          When de-referenced, it SHOULD provide human-readable documentation for the problem type
     required:
       - "status"
       - "title"
